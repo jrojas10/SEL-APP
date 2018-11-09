@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">SEL</string>
+    <string name="hint_word">User...</string>
+    <string name="button_save">Save</string>
+    <string name="empty_not_saved">User not saved because it is empty.</string>
+    <string name="default_notification_channel_id" translatable="false">fcm_default_channel</string>
 </resources>
