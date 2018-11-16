@@ -9,8 +9,14 @@ import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
+import com.example.hollo.sel.models.Book;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class HomeActivity extends AppCompatActivity {
@@ -18,6 +24,7 @@ public class HomeActivity extends AppCompatActivity {
     private TextView mtextView;
     private String val;
     public FirebaseAuth mAuth;
+    private DatabaseReference mDatabase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,7 +65,29 @@ public class HomeActivity extends AppCompatActivity {
 
         FirebaseUser user = mAuth.getCurrentUser();
 
+        mDatabase = FirebaseDatabase.getInstance().getReference();
         Log.d(TAG, "userID:" + user.getUid());
+        String title = "Intro to CS";
+        String isbn = "1234567890";
+        String author = "Author Name";
+        String course = "CS 101";
+        String condition = "NEW";
+        int price = 100;
+
+        //add book to database
+        String key = mDatabase.child("books").push().getKey();
+        Book b = new Book(title,isbn,author,course,condition,price);
+        Map<String,Object> postValues = b.toMap();
+
+        Map<String,Object> childUpdates = new HashMap<>();
+        childUpdates.put("/books/" + key,postValues);
+
+        mDatabase.updateChildren(childUpdates);
+
+        Log.d(TAG,"Book posted");
+
+
+
 
     }
 }
