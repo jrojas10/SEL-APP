@@ -9,9 +9,6 @@
     <string name="sign_in">Sign In</string>
 
 
-
-
-
     <string name="hint_user_id">User ID</string>
     <string name="get_custom_token">Get Token</string>
 
@@ -43,4 +40,5 @@
 
     <string name="firebase_status_fmt">Firebase User: %s</string>
     <string name="firebase_user_management">Firebase User Management</string>
+    <string name="title_activity_home">HomeActivity</string>
 </resources>

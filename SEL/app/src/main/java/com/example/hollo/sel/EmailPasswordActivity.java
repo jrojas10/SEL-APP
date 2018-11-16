@@ -16,6 +16,7 @@
 
 package com.example.hollo.sel;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -129,7 +130,17 @@ public class EmailPasswordActivity extends BaseActivity implements View.OnClickL
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithEmail:success");
                             FirebaseUser user = mAuth.getCurrentUser();
+
+                            //pass uid into next activity
+                            String uid = user.getUid();
+                            Intent i = new Intent(EmailPasswordActivity.this,HomeActivity.class);
+                            i.putExtra("uid",uid);
+                            startActivity(i);
+                            //end
+
                             updateUI(user);
+
+
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithEmail:failure", task.getException());
@@ -214,6 +225,9 @@ public class EmailPasswordActivity extends BaseActivity implements View.OnClickL
                     user.getEmail(), user.isEmailVerified()));
             mDetailTextView.setText(getString(R.string.firebase_status_fmt, user.getUid()));
 
+
+
+
             findViewById(R.id.emailPasswordButtons).setVisibility(View.GONE);
             findViewById(R.id.emailPasswordFields).setVisibility(View.GONE);
             findViewById(R.id.signedInButtons).setVisibility(View.VISIBLE);
@@ -242,4 +256,5 @@ public class EmailPasswordActivity extends BaseActivity implements View.OnClickL
             sendEmailVerification();
         }
     }
+
 }
