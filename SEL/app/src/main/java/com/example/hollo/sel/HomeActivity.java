@@ -82,7 +82,7 @@ public class HomeActivity extends AppCompatActivity {
         Map<String,Object> childUpdates = new HashMap<>();
         childUpdates.put("/books/" + key,postValues);
 
-        mDatabase.updateChildren(childUpdates);
+      //  mDatabase.updateChildren(childUpdates);
 
         Log.d(TAG,"Book posted");
 
