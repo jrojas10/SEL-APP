@@ -11,7 +11,7 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 
-@Database(entities = {User.class}, version = 1)
+@Database(entities = {User.class}, version = 1, exportSchema = false)
 public abstract class UserRoomDatabase extends RoomDatabase {
     private static volatile UserRoomDatabase INSTANCE;
 
