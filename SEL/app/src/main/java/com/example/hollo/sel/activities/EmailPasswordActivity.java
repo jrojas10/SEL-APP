@@ -1,12 +1,12 @@
 /**
  * Copyright 2016 Google Inc. All Rights Reserved.
- *
+ * <p>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
+ * <p>
  * http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -14,12 +14,11 @@
  * limitations under the License.
  */
 
-package com.example.hollo.sel;
+package com.example.hollo.sel.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -27,6 +26,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.hollo.sel.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -34,9 +34,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 public class EmailPasswordActivity extends BaseActivity implements View.OnClickListener {
-
     private static final String TAG = "EmailPassword";
-
     private TextView mStatusTextView;
     private TextView mDetailTextView;
     private EditText mEmailField;
@@ -62,6 +60,7 @@ public class EmailPasswordActivity extends BaseActivity implements View.OnClickL
         findViewById(R.id.emailCreateAccountButton).setOnClickListener(this);
         findViewById(R.id.signOutButton).setOnClickListener(this);
         findViewById(R.id.verifyEmailButton).setOnClickListener(this);
+        findViewById(R.id.browseBooks).setOnClickListener(this);
 
         // [START initialize_auth]
         // Initialize Firebase Auth
@@ -130,17 +129,7 @@ public class EmailPasswordActivity extends BaseActivity implements View.OnClickL
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithEmail:success");
                             FirebaseUser user = mAuth.getCurrentUser();
-
-                            //pass uid into next activity
-                            String uid = user.getUid();
-                            Intent i = new Intent(EmailPasswordActivity.this,HomeActivity.class);
-                            i.putExtra("uid",uid);
-                            startActivity(i);
-                            //end
-
                             updateUI(user);
-
-
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithEmail:failure", task.getException());
@@ -148,7 +137,6 @@ public class EmailPasswordActivity extends BaseActivity implements View.OnClickL
                                     Toast.LENGTH_SHORT).show();
                             updateUI(null);
                         }
-
                         // [START_EXCLUDE]
                         if (!task.isSuccessful()) {
                             mStatusTextView.setText(R.string.auth_failed);
@@ -224,15 +212,16 @@ public class EmailPasswordActivity extends BaseActivity implements View.OnClickL
             mStatusTextView.setText(getString(R.string.emailpassword_status_fmt,
                     user.getEmail(), user.isEmailVerified()));
             mDetailTextView.setText(getString(R.string.firebase_status_fmt, user.getUid()));
-
-
-
-
             findViewById(R.id.emailPasswordButtons).setVisibility(View.GONE);
             findViewById(R.id.emailPasswordFields).setVisibility(View.GONE);
             findViewById(R.id.signedInButtons).setVisibility(View.VISIBLE);
-
-            findViewById(R.id.verifyEmailButton).setEnabled(!user.isEmailVerified());
+            if (user.isEmailVerified()) {
+                findViewById(R.id.verifyEmailButton).setVisibility(View.GONE);
+                findViewById(R.id.browseBooks).setVisibility(View.VISIBLE);
+            } else {
+                findViewById(R.id.verifyEmailButton).setVisibility(View.VISIBLE);
+                findViewById(R.id.browseBooks).setVisibility(View.GONE);
+            }
         } else {
             mStatusTextView.setText(R.string.signed_out);
             mDetailTextView.setText(null);
@@ -254,7 +243,13 @@ public class EmailPasswordActivity extends BaseActivity implements View.OnClickL
             signOut();
         } else if (i == R.id.verifyEmailButton) {
             sendEmailVerification();
+        } else if (i == R.id.browseBooks) {
+            //pass uid into next activity
+            String uid = mAuth.getCurrentUser().getUid();
+            Intent intent = new Intent(EmailPasswordActivity.this, HomeActivity.class);
+            intent.putExtra("uid", uid);
+            startActivity(intent);
+            //end
         }
     }
-
 }
