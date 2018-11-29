@@ -1,8 +1,17 @@
 <resources>
     <string name="app_name">SEL</string>
-    <string name="hint_word">User...</string>
-    <string name="button_save">Save</string>
-    <string name="empty_not_saved">User not saved because it is empty.</string>
+    <string name="hint_title">Title...</string>
+    <string name="hint_isbn">ISBN...</string>
+    <string name="hint_author">Author...</string>
+    <string name="hint_course">Course...</string>
+    <string name="hint_condition">Condition...</string>
+    <string name="hint_price">Price...</string>
+    <string name="button_post">Post</string>
+    <string name="button_buy">Buy</string>
+    <string name="saved">Book was posted.</string>
+    <string name="not_saved">Book not posted because it is empty.</string>
+    <string name="bought">Payment was successfully processed.</string>
+    <string name="not_bought">Payment was not successfully processed.</string>
     <string name="default_notification_channel_id" translatable="false">fcm_default_channel</string>
 
 
@@ -15,6 +24,7 @@
     <string name="create_account">Create Account</string>
     <string name="send_link">Send Link</string>
     <string name="sign_out">Sign Out</string>
+    <string name="browse_books">Browse Books</string>
     <string name="verify_email">Verify Email</string>
     <string name="disconnect">Disconnect</string>
     <string name="loading">Loading…</string>
@@ -40,5 +50,5 @@
 
     <string name="firebase_status_fmt">Firebase User: %s</string>
     <string name="firebase_user_management">Firebase User Management</string>
-    <string name="title_activity_home">HomeActivity</string>
+    <string name="title_activity_home">Browse Available Books</string>
 </resources>

@@ -1,4 +1,4 @@
-package com.example.hollo.sel;
+package com.example.hollo.sel.activities;
 
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -6,6 +6,8 @@ import android.support.annotation.VisibleForTesting;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+
+import com.example.hollo.sel.R;
 
 public class BaseActivity extends AppCompatActivity {
 
@@ -40,5 +42,4 @@ public class BaseActivity extends AppCompatActivity {
         super.onStop();
         hideProgressDialog();
     }
-
 }
