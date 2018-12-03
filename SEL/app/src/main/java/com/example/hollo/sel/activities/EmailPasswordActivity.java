@@ -40,6 +40,9 @@ public class EmailPasswordActivity extends BaseActivity implements View.OnClickL
     private EditText mEmailField;
     private EditText mPasswordField;
 
+    //create credit currency
+    private static final int CREDIT = 100;
+
     // [START declare_auth]
     private FirebaseAuth mAuth;
     // [END declare_auth]
@@ -250,6 +253,12 @@ public class EmailPasswordActivity extends BaseActivity implements View.OnClickL
             intent.putExtra("uid", uid);
             startActivity(intent);
             //end
+
+            //PASS CREDITS INTO NEXT ACTIVITY
+            Intent in = new Intent(EmailPasswordActivity.this,HomeActivity.class);
+            in.putExtra("credits", CREDIT);
+            startActivity(intent);
+
         }
     }
 }

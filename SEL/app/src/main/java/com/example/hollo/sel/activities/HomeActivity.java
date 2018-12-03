@@ -32,6 +32,7 @@ public class HomeActivity extends AppCompatActivity {
     public static final int NEW_BOOK_ACTIVITY_REQUEST_CODE = 1;
     public static final int EDIT_BOOK_ACTIVITY_REQUEST_CODE = 2;
     public static final int BUY_BOOK_ACTIVITY_REQUEST_CODE = 3;
+    public static int credits =0;
 
     private Context mContext;
     private FirebaseAuth mAuth;
@@ -44,6 +45,19 @@ public class HomeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+
+        //get credits from EmailPasswordActivity
+
+        Bundle extras = getIntent().getExtras();
+        if(extras != null){
+                //inital amount is 100 credits
+                 credits = extras.getInt("credits");
+        }
+        //pass number of credits to Payment activity
+
+        Intent in = new Intent(HomeActivity.this,PaymentActivity.class);
+        in.putExtra("homeCredits", credits);
+
         mBookDatabase = FirebaseDatabase.getInstance().getReference().child("books");
         mAuth = FirebaseAuth.getInstance();
         mContext = this;
@@ -82,6 +96,8 @@ public class HomeActivity extends AppCompatActivity {
     @Override
     public void onStart() {
         super.onStart();
+
+
         ValueEventListener bookListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -118,6 +134,7 @@ public class HomeActivity extends AppCompatActivity {
             Map<String, Object> childUpdates = new HashMap<>();
             childUpdates.put(key, postValues);
             mBookDatabase.updateChildren(childUpdates);
+            credits = credits + 10;
             Log.d(TAG, "Book Posted");
             Toast.makeText(
                     getApplicationContext(),
@@ -146,6 +163,7 @@ public class HomeActivity extends AppCompatActivity {
             String key = data.getStringExtra(BookActivity.EXTRA_REPLY_KEY);
             mBookDatabase.child(key).removeValue();
             Log.d(TAG, "Book Bought");
+            credits = credits - 10;
             Toast.makeText(
                     getApplicationContext(),
                     R.string.bought,
