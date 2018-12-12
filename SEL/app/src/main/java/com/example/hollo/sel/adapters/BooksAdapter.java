@@ -59,13 +59,14 @@ public class BooksAdapter extends RecyclerView.Adapter<BooksAdapter.BookViewHold
     public class BookViewHolder extends RecyclerView.ViewHolder {
         TextView title;
         TextView author;
+        TextView price;
         Button edit;
         Button buy;
 
         public BookViewHolder(View itemView) {
             super(itemView);
             title = (TextView) itemView.findViewById(R.id.title);
-            author = (TextView) itemView.findViewById(R.id.author);
+            price = (TextView) itemView.findViewById(R.id.price);
             edit = (Button) itemView.findViewById(R.id.edit);
             buy = (Button) itemView.findViewById(R.id.buy);
         }
@@ -73,7 +74,7 @@ public class BooksAdapter extends RecyclerView.Adapter<BooksAdapter.BookViewHold
         void bind(final int listIndex) {
             final Book book = mBooks.get(listIndex);
             title.setText(book.getTitle());
-            author.setText(book.getAuthor());
+            price.setText(String.valueOf(book.getPrice()));
             edit.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

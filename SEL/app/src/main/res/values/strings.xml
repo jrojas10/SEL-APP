@@ -57,4 +57,8 @@
     <string name="welcome">WELCOME!</string>
     <string name="credits_available">You have %d credits</string>
 
+    <string name="main_notification_channel_name">Primary</string>
+    <string name="main_notification_title">There\'s been an update on SEL!</string>
+    <string name="main_notification_body">Check it out!</string>
+
 </resources>

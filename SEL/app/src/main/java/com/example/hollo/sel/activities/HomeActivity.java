@@ -3,6 +3,7 @@ package com.example.hollo.sel.activities;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -15,6 +16,7 @@ import android.widget.Toast;
 import com.example.hollo.sel.R;
 import com.example.hollo.sel.adapters.BooksAdapter;
 import com.example.hollo.sel.models.Book;
+import com.example.hollo.sel.utillities.ScheduleUtilities;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -32,7 +34,7 @@ public class HomeActivity extends AppCompatActivity {
     public static final int NEW_BOOK_ACTIVITY_REQUEST_CODE = 1;
     public static final int EDIT_BOOK_ACTIVITY_REQUEST_CODE = 2;
     public static final int BUY_BOOK_ACTIVITY_REQUEST_CODE = 3;
-    public static int credits =0;
+    public static int credits = 0;
     private boolean yourBooks;
 
     private Context mContext;
@@ -42,6 +44,9 @@ public class HomeActivity extends AppCompatActivity {
     private RecyclerView mRecyclerView;
     private LinearLayoutManager mLinearLayoutManager;
 
+    //create credit currency
+    private static final int CREDIT = 100;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,14 +55,14 @@ public class HomeActivity extends AppCompatActivity {
         //get credits from EmailPasswordActivity
 
         Bundle extras = getIntent().getExtras();
-        if(extras != null){
-                //inital amount is 100 credits
-                 credits = extras.getInt("credits");
-                 yourBooks = extras.getBoolean("yourBooks");
+        if (extras != null) {
+            //inital amount is 100 credits
+            credits = extras.getInt("credits");
+            yourBooks = extras.getBoolean("yourBooks");
         }
         //pass number of credits to Payment activity
 
-        Intent in = new Intent(HomeActivity.this,PaymentActivity.class);
+        Intent in = new Intent(HomeActivity.this, PaymentActivity.class);
         in.putExtra("homeCredits", credits);
 
         mBookDatabase = FirebaseDatabase.getInstance().getReference().child("books");
@@ -65,9 +70,11 @@ public class HomeActivity extends AppCompatActivity {
         mContext = this;
         mRecyclerView = findViewById(R.id.recyclerview);
         mLinearLayoutManager = new LinearLayoutManager(this);
+        AppBarLayout appBarLayout = (AppBarLayout) findViewById(R.id.appbar);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        appBarLayout.setExpanded(true, true);
         setSupportActionBar(toolbar);
-        if(yourBooks) {
+        if (yourBooks) {
             FloatingActionButton addButton = (FloatingActionButton) findViewById(R.id.fab);
             addButton.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -76,10 +83,18 @@ public class HomeActivity extends AppCompatActivity {
                     startActivityForResult(intent, NEW_BOOK_ACTIVITY_REQUEST_CODE);
                 }
             });
-        }
-        else if(!yourBooks){
+        } else if (!yourBooks) {
             findViewById(R.id.fab).setVisibility(mRecyclerView.GONE);
         }
+        ScheduleUtilities.scheduleRefresh(this);
+    }
+
+    @Override
+    public void onBackPressed() {
+        String uid = mAuth.getCurrentUser().getUid();
+        Intent intent = new Intent(HomeActivity.this, UserPageActivity.class);
+        intent.putExtra("uid", uid).putExtra("credits", CREDIT);
+        startActivity(intent);
     }
 
     private ArrayList<Book> parseBooks(Map<String, Object> booksMap) {
@@ -87,8 +102,8 @@ public class HomeActivity extends AppCompatActivity {
         if (booksMap != null) {
             for (Map.Entry<String, Object> entry : booksMap.entrySet()) {
                 Map bookMap = (Map) entry.getValue();
-                if(yourBooks){
-                    if(mAuth.getUid().equals(bookMap.get("owner_id"))){
+                if (yourBooks) {
+                    if (mAuth.getUid().equals(bookMap.get("owner_id"))) {
                         books.add(new Book((String) bookMap.get("title"),
                                 (String) bookMap.get("isbn"),
                                 (String) bookMap.get("author"),
@@ -98,9 +113,8 @@ public class HomeActivity extends AppCompatActivity {
                                 (String) bookMap.get("key"),
                                 (long) bookMap.get("price")));
                     }
-                }
-                else if(!yourBooks){
-                    if(!(mAuth.getUid().equals(bookMap.get("owner_id")))) {
+                } else if (!yourBooks) {
+                    if (!(mAuth.getUid().equals(bookMap.get("owner_id")))) {
                         books.add(new Book((String) bookMap.get("title"),
                                 (String) bookMap.get("isbn"),
                                 (String) bookMap.get("author"),
@@ -119,8 +133,6 @@ public class HomeActivity extends AppCompatActivity {
     @Override
     public void onStart() {
         super.onStart();
-
-
         ValueEventListener bookListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -128,6 +140,7 @@ public class HomeActivity extends AppCompatActivity {
                 mAdapter = new BooksAdapter(mContext, books, mAuth.getUid());
                 mRecyclerView.setAdapter(mAdapter);
                 mRecyclerView.setLayoutManager(mLinearLayoutManager);
+                // todo: send notification to all users
             }
 
             @Override
