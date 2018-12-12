@@ -51,4 +51,10 @@
     <string name="firebase_status_fmt">Firebase User: %s</string>
     <string name="firebase_user_management">Firebase User Management</string>
     <string name="title_activity_home">Browse Available Books</string>
+
+    <string name="for_sale">Browse Books</string>
+    <string name="your_books">Edit Books</string>
+    <string name="welcome">WELCOME!</string>
+    <string name="credits_available">You have %d credits</string>
+
 </resources>

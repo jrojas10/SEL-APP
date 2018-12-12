@@ -33,6 +33,7 @@ public class HomeActivity extends AppCompatActivity {
     public static final int EDIT_BOOK_ACTIVITY_REQUEST_CODE = 2;
     public static final int BUY_BOOK_ACTIVITY_REQUEST_CODE = 3;
     public static int credits =0;
+    private boolean yourBooks;
 
     private Context mContext;
     private FirebaseAuth mAuth;
@@ -52,6 +53,7 @@ public class HomeActivity extends AppCompatActivity {
         if(extras != null){
                 //inital amount is 100 credits
                  credits = extras.getInt("credits");
+                 yourBooks = extras.getBoolean("yourBooks");
         }
         //pass number of credits to Payment activity
 
@@ -65,14 +67,19 @@ public class HomeActivity extends AppCompatActivity {
         mLinearLayoutManager = new LinearLayoutManager(this);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        FloatingActionButton addButton = (FloatingActionButton) findViewById(R.id.fab);
-        addButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(HomeActivity.this, BookActivity.class);
-                startActivityForResult(intent, NEW_BOOK_ACTIVITY_REQUEST_CODE);
-            }
-        });
+        if(yourBooks) {
+            FloatingActionButton addButton = (FloatingActionButton) findViewById(R.id.fab);
+            addButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(HomeActivity.this, BookActivity.class);
+                    startActivityForResult(intent, NEW_BOOK_ACTIVITY_REQUEST_CODE);
+                }
+            });
+        }
+        else if(!yourBooks){
+            findViewById(R.id.fab).setVisibility(mRecyclerView.GONE);
+        }
     }
 
     private ArrayList<Book> parseBooks(Map<String, Object> booksMap) {
@@ -80,14 +87,30 @@ public class HomeActivity extends AppCompatActivity {
         if (booksMap != null) {
             for (Map.Entry<String, Object> entry : booksMap.entrySet()) {
                 Map bookMap = (Map) entry.getValue();
-                books.add(new Book((String) bookMap.get("title"),
-                        (String) bookMap.get("isbn"),
-                        (String) bookMap.get("author"),
-                        (String) bookMap.get("course"),
-                        (String) bookMap.get("condition"),
-                        (String) bookMap.get("owner_id"),
-                        (String) bookMap.get("key"),
-                        (long) bookMap.get("price")));
+                if(yourBooks){
+                    if(mAuth.getUid().equals(bookMap.get("owner_id"))){
+                        books.add(new Book((String) bookMap.get("title"),
+                                (String) bookMap.get("isbn"),
+                                (String) bookMap.get("author"),
+                                (String) bookMap.get("course"),
+                                (String) bookMap.get("condition"),
+                                (String) bookMap.get("owner_id"),
+                                (String) bookMap.get("key"),
+                                (long) bookMap.get("price")));
+                    }
+                }
+                else if(!yourBooks){
+                    if(!(mAuth.getUid().equals(bookMap.get("owner_id")))) {
+                        books.add(new Book((String) bookMap.get("title"),
+                                (String) bookMap.get("isbn"),
+                                (String) bookMap.get("author"),
+                                (String) bookMap.get("course"),
+                                (String) bookMap.get("condition"),
+                                (String) bookMap.get("owner_id"),
+                                (String) bookMap.get("key"),
+                                (long) bookMap.get("price")));
+                    }
+                }
             }
         }
         return books;

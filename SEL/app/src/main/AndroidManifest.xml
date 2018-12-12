@@ -23,6 +23,7 @@
             android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity android:name=".activities.BookActivity" />
         <activity android:name=".activities.PaymentActivity" />
+        <activity android:name=".activities.UserPageActivity"/>
     </application>
 
 </manifest>

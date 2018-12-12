@@ -77,6 +77,9 @@ public class EmailPasswordActivity extends BaseActivity implements View.OnClickL
         super.onStart();
         // Check if user is signed in (non-null) and update UI accordingly.
         FirebaseUser currentUser = mAuth.getCurrentUser();
+        if(currentUser != null){
+            sendToUserHomepage();
+        }
         updateUI(currentUser);
     }
     // [END on_start_check_user]
@@ -132,7 +135,7 @@ public class EmailPasswordActivity extends BaseActivity implements View.OnClickL
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithEmail:success");
                             FirebaseUser user = mAuth.getCurrentUser();
-                            updateUI(user);
+                            sendToUserHomepage();
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithEmail:failure", task.getException());
@@ -155,6 +158,15 @@ public class EmailPasswordActivity extends BaseActivity implements View.OnClickL
         mAuth.signOut();
         updateUI(null);
     }
+
+    private void sendToUserHomepage(){
+        String uid = mAuth.getCurrentUser().getUid();
+        Intent intent = new Intent(EmailPasswordActivity.this, UserPageActivity.class);
+        intent.putExtra("uid", uid).putExtra("credits", CREDIT);
+        startActivity(intent);
+        //end
+    }
+
 
     private void sendEmailVerification() {
         // Disable button
@@ -212,8 +224,7 @@ public class EmailPasswordActivity extends BaseActivity implements View.OnClickL
     private void updateUI(FirebaseUser user) {
         hideProgressDialog();
         if (user != null) {
-            mStatusTextView.setText(getString(R.string.emailpassword_status_fmt,
-                    user.getEmail(), user.isEmailVerified()));
+            mStatusTextView.setText(getString(R.string.emailpassword_status_fmt, user.getEmail(), user.isEmailVerified()));
             mDetailTextView.setText(getString(R.string.firebase_status_fmt, user.getUid()));
             findViewById(R.id.emailPasswordButtons).setVisibility(View.GONE);
             findViewById(R.id.emailPasswordFields).setVisibility(View.GONE);
@@ -242,11 +253,11 @@ public class EmailPasswordActivity extends BaseActivity implements View.OnClickL
             createAccount(mEmailField.getText().toString(), mPasswordField.getText().toString());
         } else if (i == R.id.emailSignInButton) {
             signIn(mEmailField.getText().toString(), mPasswordField.getText().toString());
-        } else if (i == R.id.signOutButton) {
+        }/* else if (i == R.id.signOutButton) {
             signOut();
-        } else if (i == R.id.verifyEmailButton) {
+        } */else if (i == R.id.verifyEmailButton) {
             sendEmailVerification();
-        } else if (i == R.id.browseBooks) {
+        }/* else if (i == R.id.browseBooks) {
             //pass uid into next activity
             String uid = mAuth.getCurrentUser().getUid();
             Intent intent = new Intent(EmailPasswordActivity.this, HomeActivity.class);
@@ -259,6 +270,6 @@ public class EmailPasswordActivity extends BaseActivity implements View.OnClickL
             in.putExtra("credits", CREDIT);
             startActivity(intent);
 
-        }
+        }*/
     }
 }
