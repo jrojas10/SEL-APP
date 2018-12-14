@@ -84,6 +84,8 @@ public class EmailPasswordActivity extends BaseActivity implements View.OnClickL
     }
     // [END on_start_check_user]
 
+
+
     private void createAccount(String email, String password) {
         Log.d(TAG, "createAccount:" + email);
         if (!validateForm()) {
@@ -216,6 +218,10 @@ public class EmailPasswordActivity extends BaseActivity implements View.OnClickL
             valid = false;
         } else {
             mPasswordField.setError(null);
+        }
+
+        if (password.length() < 6) {
+            mPasswordField.setError("Password must contain 6 or more characters.");
         }
 
         return valid;
