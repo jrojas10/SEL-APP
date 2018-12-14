@@ -17,6 +17,7 @@
 package com.example.hollo.sel.activities;
 
 import android.content.Intent;
+import android.nfc.Tag;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
@@ -137,7 +138,15 @@ public class EmailPasswordActivity extends BaseActivity implements View.OnClickL
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithEmail:success");
                             FirebaseUser user = mAuth.getCurrentUser();
-                            sendToUserHomepage();
+                            try {
+                                if (user.isEmailVerified()){
+                                    sendToUserHomepage();
+                                } else {
+                                    Toast.makeText(EmailPasswordActivity.this, "User must be verified.",Toast.LENGTH_SHORT).show();
+                                }
+                            } catch (NullPointerException e) {
+                                Log.d(TAG, "Null pointer exception.");
+                            }
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithEmail:failure", task.getException());
@@ -259,9 +268,9 @@ public class EmailPasswordActivity extends BaseActivity implements View.OnClickL
             createAccount(mEmailField.getText().toString(), mPasswordField.getText().toString());
         } else if (i == R.id.emailSignInButton) {
             signIn(mEmailField.getText().toString(), mPasswordField.getText().toString());
-        }/* else if (i == R.id.signOutButton) {
+        }else if (i == R.id.signOutButton) {
             signOut();
-        } */else if (i == R.id.verifyEmailButton) {
+        } else if (i == R.id.verifyEmailButton) {
             sendEmailVerification();
         }/* else if (i == R.id.browseBooks) {
             //pass uid into next activity
