@@ -1,7 +1,10 @@
 package com.example.hollo.sel.activities;
 
+
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
@@ -26,6 +29,8 @@ public class BookActivity extends AppCompatActivity {
     private EditText mEditCourse;
     private EditText mEditCondition;
     private EditText mEditPrice;
+
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -72,4 +77,5 @@ public class BookActivity extends AppCompatActivity {
             }
         });
     }
+
 }
