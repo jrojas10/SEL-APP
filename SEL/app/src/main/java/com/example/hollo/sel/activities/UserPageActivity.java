@@ -62,6 +62,8 @@ public class UserPageActivity extends AppCompatActivity implements View.OnClickL
             mAuth.signOut();
             Intent intent = new Intent(UserPageActivity.this, EmailPasswordActivity.class);
             startActivity(intent);
+            // adding finish terminates the present activity disabling ability to return to page after signing out
+            finish();
         }
 
     }

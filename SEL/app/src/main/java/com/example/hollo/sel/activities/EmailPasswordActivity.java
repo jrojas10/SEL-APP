@@ -278,4 +278,13 @@ public class EmailPasswordActivity extends BaseActivity implements View.OnClickL
 
         }*/
     }
+
+    @Override
+    public void onBackPressed() {
+        // disabling back button by not calling anything
+//        super.onBackPressed();
+//        Intent intent = new Intent(EmailPasswordActivity.this, EmailPasswordActivity.class);
+//        startActivity(intent);
+//        finish();
+    }
 }
