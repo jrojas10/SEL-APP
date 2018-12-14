@@ -68,4 +68,10 @@ public class UserPageActivity extends AppCompatActivity implements View.OnClickL
 
     }
 
+    @Override
+    public void onBackPressed() {
+        // does nothing on back button pressed
+        // code is needed to enable actions to be take when button is pressed.
+//        super.onBackPressed();
+    }
 }
