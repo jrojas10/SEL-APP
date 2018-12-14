@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import com.example.hollo.sel.R;
@@ -35,7 +36,7 @@ public class UserPageActivity extends AppCompatActivity implements View.OnClickL
         if(extras != null){
             credits = extras.getInt("credits");
             mCreditsTextView.setText(getString(R.string.credits_available, credits));
-
+            Log.w("credit Balance",String.valueOf(credits));
         }
 
     }
@@ -53,14 +54,9 @@ public class UserPageActivity extends AppCompatActivity implements View.OnClickL
         else if(i == R.id.buttonBooksOwned){
             String uid = mAuth.getCurrentUser().getUid();
             Intent intent = new Intent(UserPageActivity.this, HomeActivity.class);
-            intent.putExtra("uid", uid).putExtra("yourBooks",true );
+            intent.putExtra("uid", uid).putExtra("yourBooks",true ).putExtra("credits", credits);
             startActivity(intent);
-            //end
 
-            //PASS CREDITS INTO NEXT ACTIVITY
-            Intent in = new Intent(UserPageActivity.this,HomeActivity.class);
-            in.putExtra("credits", credits);
-            startActivity(intent);
         }
         else if(i == R.id.buttonSignOut){
             mAuth.signOut();

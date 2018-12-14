@@ -1,5 +1,6 @@
 package com.example.hollo.sel.activities;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -58,6 +59,7 @@ public class HomeActivity extends AppCompatActivity {
         if (extras != null) {
             //inital amount is 100 credits
             credits = extras.getInt("credits");
+            Log.w("credit Balance",String.valueOf(credits));
             yourBooks = extras.getBoolean("yourBooks");
         }
         //pass number of credits to Payment activity
@@ -93,7 +95,7 @@ public class HomeActivity extends AppCompatActivity {
     public void onBackPressed() {
         String uid = mAuth.getCurrentUser().getUid();
         Intent intent = new Intent(HomeActivity.this, UserPageActivity.class);
-        intent.putExtra("uid", uid).putExtra("credits", CREDIT);
+        intent.putExtra("uid", uid).putExtra("credits", credits);
         startActivity(intent);
     }
 
@@ -154,6 +156,7 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     @Override
+    @TargetApi(24)
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == NEW_BOOK_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK) {
